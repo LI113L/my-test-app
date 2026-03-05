@@ -3,37 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超准性格测试</title>
+    <title>超准颜值测试</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
-        .box {
-            max-width: 320px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background: #f5f5f5;
+        .container {
+            background: white;
+            max-width: 380px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        h1 {
+            color: #f5576c;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .upload-area {
+            border: 2px dashed #f093fb;
+            border-radius: 12px;
+            padding: 30px 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            background: #fef5ff;
+        }
+        .upload-icon {
+            font-size: 40px;
+            color: #f093fb;
+            margin-bottom: 10px;
+        }
+        .upload-text {
+            color: #888;
+            font-size: 14px;
+        }
+        #preview {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
         }
         button {
-            padding: 10px 20px;
-            margin-top: 20px;
-            background: #ff5a5f;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fef5ff;
+            border-radius: 12px;
+            display: none;
+        }
+        .score {
+            font-size: 32px;
+            color: #f5576c;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .desc {
+            color: #666;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>超准性格测试</h1>
-        <p>本测试仅供娱乐</p>
-        <button onclick="alert('你是一个温柔又有力量的人～')">开始测试</button>
+    <div class="container">
+        <h1>超准颜值测试</h1>
+        <p class="subtitle">本测试仅供娱乐，颜值由你定义✨</p>
+
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">点击上传照片开始测试</div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none" onchange="previewImage(event)">
+        </div>
+
+        <img id="preview" alt="预览图">
+
+        <button id="testBtn" disabled onclick="testFace()">开始颜值测试</button>
+
+        <div class="result" id="result">
+            <div class="score" id="score">--</div>
+            <div class="desc" id="desc">正在生成你的颜值报告...</div>
+        </div>
     </div>
+
+    <script>
+        let hasImage = false;
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    hasImage = true;
+                    document.getElementById('testBtn').disabled = false;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function testFace() {
+            if (!hasImage) return;
+
+            const btn = document.getElementById('testBtn');
+            btn.disabled = true;
+            btn.textContent = '测试中...';
+
+            // 模拟AI分析过程（娱乐向）
+            setTimeout(() => {
+                const score = Math.floor(Math.random() * 20) + 80; // 80-99分
+                let desc = '';
+                if (score >= 95) {
+                    desc = '颜值天花板，自带明星光环✨';
+                } else if (score >= 90) {
+                    desc = '神仙颜值，回头率爆表💖';
+                } else if (score >= 85) {
+                    desc = '清新脱俗，气质绝佳🌸';
+                } else {
+                    desc = '耐看型选手，越看越有味道😉';
+                }
+
+                document.getElementById('score').textContent = score + '分';
+                document.getElementById('desc').textContent = desc;
+                document.getElementById('result').style.display = 'block';
+                btn.textContent = '再测一次';
+                btn.disabled = false;
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
